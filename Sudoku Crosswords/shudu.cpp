@@ -64,10 +64,10 @@ void print_shudo(char arr[][9])
 	{	
 		for(j=0;j<9;j++)
 		{
-			cout<<arr[i][j]<<' ';
+			//cout<<arr[i][j]<<' ';
 			outfile<<arr[i][j]<<' ';
 		}
-		cout<<endl;
+		//cout<<endl;
 		outfile<<endl;
 	}
 	outfile<<endl;
@@ -118,8 +118,8 @@ void generator_shudo()
 		shudo[7][i]=mini[(i/3+1>2)?0:i/3+1][i%3];
 		shudo[8][i]=mini[i/3-1][i%3];
 	}
-	print_shudo(shudo);	
-	cout<<endl;
+	print_shudo(shudo);
+	cout<<"finish"<<endl;
 }
 bool isNum(string str)  
 {  
