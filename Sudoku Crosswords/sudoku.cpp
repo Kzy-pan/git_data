@@ -16,8 +16,9 @@ int main(int argc, char** argv)
 	void print_shudo(char arr[][9]);//将生成的数独终盘传入文件中 
 	void generator_shudo(struct Nod* r);//用于生成数独终盘 
 	bool isNum(string str);//判断是否为纯数字，用于参数传入
-	bool check(char arr[][3],struct Nod* r,char ch[4]);
-	int tmp;
+	void changeR(char shudo[][9],char *ch);//对行进行调整 
+	void changeC(char shudo[][9],char *ch);//队列进行调整 
+	bool check(char arr[][3],struct Nod* r,char ch[4]);//重复性检查 
 	int j=0;
 	struct Nod* root =new struct Nod;
 	for(int i =0;i<9;i++)
@@ -116,20 +117,59 @@ bool check(char arr[][3],struct Nod* r,char ch[4])
 	}
 	return jd;
 }
+void changeR(char shudo[][9],char *ch)
+{
+	int jd;
+	for(int j=1;j<3;j++)
+	{
+		jd=rand()%4;		
+		ch[j-1]=jd;
+		if(jd)
+		{
+			for(int i=0;i<9;i++)
+			{
+				char tmp=shudo[jd-1+j*3][i];
+				shudo[jd-1+j*3][i]=shudo[(jd>2?0:jd)+j*3][i];
+				shudo[(jd>2?0:jd)+j*3][i]=tmp;
+			}
+		}
+	}//对于第4-6行，第7-9行进行对调	
+}
+void changeC(char shudo[][9],char *ch)
+{
+	int jd;
+	for(int j=1;j<3;j++)
+	{
+		jd=rand()%4;
+		ch[j+1]=jd;
+		if(jd)
+		{
+			for(int i=0;i<9;i++)
+			{
+				char tmp=shudo[i][jd-1+j*3];
+				shudo[i][jd-1+j*3]=shudo[i][(jd>2?0:jd)+j*3];
+				shudo[i][(jd>2?0:jd)+j*3]=tmp;
+			}
+		}
+	}//对于第4-6列，第7-9列进行对调
+}
 void generator_shudo(struct Nod* r)
 {
 	char ch[4];
 	char shudo[9][9];
-	char mini[3][3];
-	for(int i=0;i<9;i++)	
-		for(int j=0;j<9;j++)
-			shudo[i][j]='0';
-	shudo[0][0]='2';
-	mini[0][0]='2';//初始化 
+	char mini[3][3];	 
 	char a[8]={'1','3','4','5','6','7','8','9'};
 	while(1)
 	{
-	a[0]='1';a[1]='3';a[2]='4';a[3]='5';a[4]='6';a[5]='7';a[6]='8';a[7]='9';		
+	a[0]='1';a[1]='3';a[2]='4';a[3]='5';a[4]='6';a[5]='7';a[6]='8';a[7]='9';
+	for(int i=0;i<9;i++)	
+		for(int j=0;j<9;j++)
+			shudo[i][j]='0';
+	for(int i=0;i<3;i++)	
+		for(int j=0;j<3;j++)
+			mini[i][j]='0';
+	shudo[0][0]='2';
+	mini[0][0]='2';//初始化		
 	ShuffleArray_Fisher_Yates(a,8);//得到乱序用于填充第一宫 
 	for(int i=1;i<9;i++)
 	{
@@ -166,30 +206,8 @@ void generator_shudo(struct Nod* r)
 		shudo[7][i]=mini[(i/3+1>2)?0:i/3+1][i%3];
 		shudo[8][i]=mini[i/3-1][i%3];
 	}//利用mini填充第八宫，第九宫
-	for(int j=1;j<3;j++)
-	{
-		int jd=rand()%4;
-		ch[j-1]=jd;
-		if(jd)
-			for(int i=0;i<9;i++)
-			{
-				char tmp=shudo[jd-1+j*3][i];
-				shudo[jd-1+j*3][i]=shudo[(jd>2?0:jd)+j*3][i];
-				shudo[(jd>2?0:jd)+j*3][i]=tmp;
-			}
-	}//对于第4-6行，第7-9行进行对调 
-	for(int j=1;j<3;j++)
-	{
-		int jd=rand()%4;
-		ch[j+1]=jd;
-		if(jd)
-			for(int i=0;i<9;i++)
-			{
-				char tmp=shudo[i][jd-1+j*3];
-				shudo[i][jd-1+j*3]=shudo[i][(jd>2?0:jd)+j*3];
-				shudo[i][(jd>2?0:jd)+j*3]=tmp;
-			}
-	}//对于第4-6列，第7-9列进行对调
+	changeR(shudo,ch);
+	changeC(shudo,ch);
 	if(check(mini,r,ch)) break;
 	}
 	print_shudo(shudo);
