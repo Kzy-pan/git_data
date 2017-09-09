@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 		exit(1);
 	}
 	srand(time(0));//设置随机种子 
-	if(argv[1]&&argc<=3) 
+	if(argv[1]&&argc==3) 
 	{
 		if(!strcmp(argv[1],"-c"))//对于参数格式的判断 
 		{
