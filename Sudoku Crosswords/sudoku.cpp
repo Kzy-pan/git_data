@@ -36,10 +36,14 @@ int main(int argc, char** argv)
 			string str=argv[2];
 			if(isNum(str))
 			{
-				j=atoi(str.c_str());	
-				for(int i=0;i<j;i++)
+				j=atoi(str.c_str());
+				if(j>10321920) cerr<<"N is too big"<<endl;
+				else	
 				{
-					generator_shudo(root);
+					for(int i=0;i<j;i++)
+					{
+						generator_shudo(root);
+					}
 				}
 			}
 			else cerr<<"bad input"<<endl;
